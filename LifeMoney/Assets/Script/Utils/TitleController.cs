@@ -8,9 +8,12 @@ using UnityEngine.SceneManagement;
 public class TitleController : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI test;
-
+    GameObject TitlePanel;
+    [SerializeField]
+    GameObject OptionPanel;
+    [SerializeField]
     AudioSource audioSource;
+
     Option option;
 
     string playerName = "";
@@ -22,11 +25,19 @@ public class TitleController : MonoBehaviour
     }
     void Update()
     {
-        test.text = Application.dataPath + "\n" + Application.streamingAssetsPath;
+
     }
-    public void ClickOption()
+    public void ClickGameStart()
 	{
-        option.SetReturnScene(SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene("Option");
+        SceneManager.LoadScene("Game");
+	}
+    public void ClickPanelChange()
+	{
+        TitlePanel.SetActive(!TitlePanel.activeSelf);
+        OptionPanel.SetActive(!OptionPanel.activeSelf);
+	}
+    public void ClickSave()
+	{
+
 	}
 }
