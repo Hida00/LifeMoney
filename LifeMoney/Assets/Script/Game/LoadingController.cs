@@ -29,13 +29,16 @@ public class LoadingController : MonoBehaviour
     int arrayCount = 0;
     int moveCount  = 0;
 
+    [System.NonSerialized]
     public bool isLoading = false;
+    bool waitingAPI = true;
 
     void Start()
     {
         Application.targetFrameRate = 60;
-        //StartCoroutine(TextLoad());
-        //StartCoroutine(GetAPI());
+
+        gameController.Options = TitleController.OPTION;
+        StartCoroutine(GetAPI());
     }
 
     void Update()
@@ -54,49 +57,12 @@ public class LoadingController : MonoBehaviour
                 }
             }
         }
-    }
-
-    IEnumerator TextLoad()
-    {
-        string result;
-        string filepath = Application.streamingAssetsPath + "/data.csv";
-        if(filepath.Contains("://") || filepath.Contains(":///"))
-        {
-            UnityWebRequest request = UnityWebRequest.Get(filepath);
-            // データをJSONで受け取りたいのでHeaderをセット
-            request.SetRequestHeader("Content-Type", "application/json");
-            yield return request.SendWebRequest();
-            result = request.downloadHandler.text;
-            //WWW www = new WWW (filepath);
-            //yield return www;
-            //var result = www.text;
-            Debug.Log(result);
-
-        }
-        else
-        {
-            result = File.ReadAllText(filepath);
-            //Debug.Log(result);
-
-            Debug.Log((result.Split('\n').Length));
-        }
-
-        int count = 0;
-        foreach(var line in result.Split('\n'))
-        {
-            var temp = new float[line.Length];
-            var lines = line.Split(',');
-            int index = 0;
-            if(count == 6)
-                break;
-            Debug.Log($"{lines.Length}");
-            foreach(var item in lines)
-			{
-                temp[index++] = float.Parse(item);
-			}
-            gameController.GraphDatas.data_trans[count++] = temp;
+        if(!waitingAPI)
+		{
+            gameController.status = State.PLAYING;
 		}
     }
+
     IEnumerator GetAPI()
     {
         string result;
@@ -116,5 +82,6 @@ public class LoadingController : MonoBehaviour
             gameController.GraphDatas.exDatasHigh[i] = float.Parse(json.quotes[i].high);
             gameController.GraphDatas.exDatasOpen[i] = float.Parse(json.quotes[i].open);
         }
+        waitingAPI = false;
     }
 }

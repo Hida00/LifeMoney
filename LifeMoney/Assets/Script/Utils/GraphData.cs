@@ -10,13 +10,20 @@ public class GraphData
 	public float[] exDatasHigh;
 	public float[] exDatasOpen;
 
-	public float[][] data_trans;
+	public List<List<float>> progress_data_trans;
+
+	public readonly string[] UnitList = { "‰~/", "‰~/’", "‰~/?", "‰~/", "‰~/?", "‰~/" };
 
 	public GraphData()
 	{
 		exDatasHigh = new float[6];
 		exDatasOpen = new float[6];
-		data_trans = new float[6][];
+		progress_data_trans = new List<List<float>>();
+
+		for(int i = 0; i < 6; i++)
+		{
+			progress_data_trans.Add(new List<float>());
+		}
 	}
 	public void SetPrice()
 	{

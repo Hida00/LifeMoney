@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayData
 {
 	public string name;
-	public long money;
 
+	public long cacheMoney;
+	public long virtualMoney;
 }
